@@ -3,6 +3,7 @@
 
 #include <queue>
 #include <vector>
+#include <set>
 
 #include "maze.h"
 
@@ -20,7 +21,13 @@ struct Location {
 
   bool operator==(const Location &other) const {
     return x == other.x && y == other.y;
-  }  ///< Оператор сравнения
+  }
+  bool operator!=(const Location &other) const {
+    return x != other.x || y != other.y;
+  }
+  bool operator<(const Location &other) const {
+    return x < other.x || (x == other.x && y < other.y);
+  }
 };
 
 /**
@@ -50,7 +57,10 @@ class MazeSolver {
    * @param matrix_ матрица, описывающая стены лабиринта
    * @return результат проверки (true - стена есть, false - стены нет)
    */
-  static bool CheckForwardWall(Location current, Location turn, Matrix matrix_);
+  static bool CheckWall(Location current, Location direction, const Matrix& matrix_);
+
+  static bool SolveRecursive(Location current, Location end, const Matrix& matrix_,
+                                std::vector<Location>& path, std::set<Location>& visited, Location direction);
 };
 
 }  // namespace s21

@@ -32,7 +32,7 @@ install:
 	@mv $(BUILD)/$(PROJECT_NAME) ./$(APP)/
 	@echo "Done.\n"
 	@echo "Create link on Desktop..."
-	@-ln $(APP)/$(PROJECT_NAME) ~/Desktop/
+	@-ln -s $(APP)/$(PROJECT_NAME) ~/Desktop/
 	@echo "Installation complete!"
 
 open_app: ../app

@@ -26,7 +26,14 @@ std::vector<Location> MazeSolver::SolveMaze(Location begin, Location end, const 
     const Matrix& matrix_ = maze_.GetMatrix();
     std::vector<Location> path;
     std::set<Location> visited;
-    SolveRecursive(begin, end, matrix_, path, visited, {0, 1});  // Начнем с направления вниз
+    std::vector<Location> turnOrder = { {-1, 0}, {1, 0}, {0, 1}, {0, -1} };
+    for (auto& loc : turnOrder) {
+      if (SolveRecursive(begin, end, matrix_, path, visited, loc)) {
+        return path;
+      }
+      path.clear();
+      visited.clear();
+    }
     return path;
 }
 
@@ -45,7 +52,7 @@ bool MazeSolver::SolveRecursive(Location current, Location end, const Matrix& ma
     path.push_back(current);
 
     // Порядок поворотов: влево, прямо, вправо
-    std::vector<Location> turnOrder = { {-direction.y, direction.x}, direction, {direction.y, -direction.x} };
+    std::vector<Location> turnOrder = { {-direction.y, direction.x}, direction, {direction.y, -direction.x}, {-direction.y, -direction.x} };
     
     for (const auto& turn : turnOrder) {
         Location next(current.x + turn.x, current.y + turn.y);
